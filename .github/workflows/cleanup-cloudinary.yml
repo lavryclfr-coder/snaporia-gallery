@@ -40,7 +40,7 @@ jobs:
 
             do {
               let search = cloudinary.search
-                .expression('resource_type:image AND asset_folder="snaporia_gallery" AND created_at<7d')
+                .expression('resource_type:image AND asset_folder="snaporia_gallery" AND uploaded_at<7d')
                 .max_results(500);
 
               if (cursor) {
@@ -53,9 +53,16 @@ jobs:
 
             } while (cursor);
 
-            console.log('Foto yang berusia lebih dari 7 hari: ' + total);
+            console.log('Jumlah foto lebih dari 7 hari: ' + total);
             console.log('Pemeriksaan selesai. Belum ada foto yang dihapus.');
           }
+
+          main().catch(error => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
+
 
           main().catch(error => {
             console.error(error);
