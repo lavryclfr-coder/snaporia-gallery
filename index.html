@@ -1,12 +1,130 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNAPORIA Gallery</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px 15px;
+            font-family: Arial, sans-serif;
+            background: #fff8f5;
+            color: #493d3a;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 10px;
+        }
+
+        header h1 {
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #887875;
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 19px;
+        }
+
+        .galeri {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .foto {
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .foto img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .kosong {
+            text-align: center;
+            padding: 30px 10px;
+            color: #887875;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #9b8883;
+            font-size: 12px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>SNAPORIA GALLERY</h1>
-    <p>Galeri foto pelanggan SNAPORIA.</p>
+
+<header>
+    <h1>SNAPORIA</h1>
+    <p>Your moments, your memories.</p>
+</header>
+
+<h2>Foto Asli</h2>
+<div class="galeri" id="galeri-asli"></div>
+
+<h2>Foto dengan Frame</h2>
+<div class="galeri" id="galeri-frame"></div>
+
+<footer>
+    © SNAPORIA Photobooth
+</footer>
+
+<script>
+    const parameter = new URLSearchParams(window.location.search);
+
+    const fotoAsli = JSON.parse(
+        parameter.get('asli') || '[]'
+    );
+
+    const fotoFrame = parameter.get('frame');
+
+    function tampilkanFoto(daftarFoto, tempat) {
+        const galeri = document.getElementById(tempat);
+
+        daftarFoto.forEach((url, index) => {
+            const kotak = document.createElement('div');
+            kotak.className = 'foto';
+
+            const gambar = document.createElement('img');
+            gambar.src = url;
+            gambar.alt = 'Foto SNAPORIA ' + (index + 1);
+            gambar.loading = 'lazy';
+
+            kotak.appendChild(gambar);
+            galeri.appendChild(kotak);
+        });
+
+        if (daftarFoto.length === 0) {
+            galeri.innerHTML =
+                '<p class="kosong">Belum ada foto.</p>';
+        }
+    }
+
+    tampilkanFoto(fotoAsli, 'galeri-asli');
+    tampilkanFoto(fotoFrame ? [fotoFrame] : [], 'galeri-frame');
+</script>
+
 </body>
+</html>
+
 </html>
