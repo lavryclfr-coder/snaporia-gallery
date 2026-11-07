@@ -1,0 +1,64 @@
+
+name: SNAPORIA Photo Cleanup
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Cloudinary
+        run: npm install cloudinary
+
+      - name: Check photos older than 7 days
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: |
+          node <<'NODE'
+          const cloudinary = require('cloudinary').v2;
+
+          cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET
+          });
+
+          async function main() {
+            let cursor;
+            let total = 0;
+
+            do {
+              let search = cloudinary.search
+                .expression('resource_type:image AND asset_folder="snaporia_gallery" AND created_at<7d')
+                .max_results(500);
+
+              if (cursor) {
+                search = search.next_cursor(cursor);
+              }
+
+              const result = await search.execute();
+              total += (result.resources || []).length;
+              cursor = result.next_cursor;
+
+            } while (cursor);
+
+            console.log('Foto yang berusia lebih dari 7 hari: ' + total);
+            console.log('Pemeriksaan selesai. Belum ada foto yang dihapus.');
+          }
+
+          main().catch(error => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
