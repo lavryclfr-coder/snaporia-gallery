@@ -7,9 +7,7 @@
     <title>SNAPORIA Gallery</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -24,14 +22,9 @@
             padding: 25px 10px;
         }
 
-        header h1 {
-            letter-spacing: 4px;
-            margin-bottom: 8px;
-        }
+        header h1 { letter-spacing: 4px; }
 
-        header p {
-            color: #887875;
-        }
+        header p { color: #887875; }
 
         h2 {
             margin-top: 30px;
@@ -88,48 +81,67 @@
 <h2>Foto dengan Frame</h2>
 <div class="galeri" id="galeri-frame"></div>
 
-<footer>
-    © SNAPORIA Photobooth
-</footer>
+<footer>© SNAPORIA Photobooth</footer>
 
 <script>
+async function muatGaleri() {
     const parameter = new URLSearchParams(window.location.search);
+    const alamatData = parameter.get('data');
 
-    const fotoAsli = JSON.parse(
-        parameter.get('asli') || '[]'
-    );
-
-    const fotoBW = JSON.parse(
-        parameter.get('bw') || '[]'
-    );
-
-    const fotoFrame = parameter.get('frame');
-
-    function tampilkanFoto(daftarFoto, tempat) {
-        const galeri = document.getElementById(tempat);
-
-        daftarFoto.forEach((url, index) => {
-            const kotak = document.createElement('div');
-            kotak.className = 'foto';
-
-            const gambar = document.createElement('img');
-            gambar.src = url;
-            gambar.alt = 'Foto SNAPORIA ' + (index + 1);
-            gambar.loading = 'lazy';
-
-            kotak.appendChild(gambar);
-            galeri.appendChild(kotak);
-        });
-
-        if (daftarFoto.length === 0) {
-            galeri.innerHTML =
-                '<p class="kosong">Belum ada foto.</p>';
-        }
+    if (!alamatData) {
+        tampilkanKosong();
+        return;
     }
 
-    tampilkanFoto(fotoAsli, 'galeri-asli');
-    tampilkanFoto(fotoBW, 'galeri-bw');
-    tampilkanFoto(fotoFrame ? [fotoFrame] : [], 'galeri-frame');
+    try {
+        const response = await fetch(alamatData);
+
+        if (!response.ok) {
+            throw new Error('Data galeri tidak ditemukan.');
+        }
+
+        const data = await response.json();
+
+        tampilkanFoto(data.asli || [], 'galeri-asli');
+        tampilkanFoto(data.bw || [], 'galeri-bw');
+        tampilkanFoto(data.frame ? [data.frame] : [], 'galeri-frame');
+
+    } catch (error) {
+        document.body.innerHTML +=
+            '<p class="kosong">Galeri belum bisa dimuat. Silakan coba lagi.</p>';
+    }
+}
+
+function tampilkanFoto(daftarFoto, tempat) {
+    const galeri = document.getElementById(tempat);
+
+    if (!daftarFoto.length) {
+        galeri.innerHTML = '<p class="kosong">Belum ada foto.</p>';
+        return;
+    }
+
+    daftarFoto.forEach((url, index) => {
+        const kotak = document.createElement('div');
+        kotak.className = 'foto';
+
+        const gambar = document.createElement('img');
+        gambar.src = url;
+        gambar.alt = 'Foto SNAPORIA ' + (index + 1);
+        gambar.loading = 'lazy';
+
+        kotak.appendChild(gambar);
+        galeri.appendChild(kotak);
+    });
+}
+
+function tampilkanKosong() {
+    ['galeri-asli', 'galeri-bw', 'galeri-frame'].forEach(id => {
+        document.getElementById(id).innerHTML =
+            '<p class="kosong">Belum ada sesi foto.</p>';
+    });
+}
+
+muatGaleri();
 </script>
 
 </body>
