@@ -79,8 +79,11 @@
     <p>Your moments, your memories.</p>
 </header>
 
-<h2>Foto Asli</h2>
+<h2>Foto Original</h2>
 <div class="galeri" id="galeri-asli"></div>
+
+<h2>Foto Black & White</h2>
+<div class="galeri" id="galeri-bw"></div>
 
 <h2>Foto dengan Frame</h2>
 <div class="galeri" id="galeri-frame"></div>
@@ -94,6 +97,10 @@
 
     const fotoAsli = JSON.parse(
         parameter.get('asli') || '[]'
+    );
+
+    const fotoBW = JSON.parse(
+        parameter.get('bw') || '[]'
     );
 
     const fotoFrame = parameter.get('frame');
@@ -121,10 +128,9 @@
     }
 
     tampilkanFoto(fotoAsli, 'galeri-asli');
+    tampilkanFoto(fotoBW, 'galeri-bw');
     tampilkanFoto(fotoFrame ? [fotoFrame] : [], 'galeri-frame');
 </script>
 
 </body>
-</html>
-
 </html>
