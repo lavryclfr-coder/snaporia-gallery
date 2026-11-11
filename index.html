@@ -4,92 +4,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNAPORIA Gallery</title>
+
+    <title>KLIKSNAP — Your Moments, Your Memories</title>
+
+    <meta name="theme-color" content="#123B91">
 
     <style>
-        * { box-sizing: border-box; }
+        :root {
+            --blue: #2454C5;
+            --navy: #101D40;
+            --lemon: #EFFF62;
+            --white: #FFFFFF;
+            --soft: #F4F7FF;
+            --muted: #77819A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            margin: 0;
-            padding: 25px 15px;
-            font-family: Arial, sans-serif;
-            background: #fff8f5;
-            color: #493d3a;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--soft);
+            color: var(--navy);
+            min-height: 100vh;
         }
 
-        header {
-            text-align: center;
-            padding: 25px 10px;
+        /* HEADER */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: white;
+            border-bottom: 1px solid #e8edfa;
         }
 
-        header h1 { letter-spacing: 4px; }
+        .brand {
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--navy);
+        }
 
-        header p { color: #887875; }
+        .brand span {
+            color: var(--blue);
+        }
 
-        h2 {
-            margin-top: 30px;
+        .nav-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--blue);
+            background: #edf2ff;
+            padding: 10px 16px;
+            border-radius: 30px;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: var(--blue);
+            color: white;
+            padding: 65px 7% 75px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: var(--lemon);
+            border-radius: 50%;
+            right: -80px;
+            top: -100px;
+            opacity: 0.95;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 650px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: var(--lemon);
+            color: var(--navy);
+            padding: 9px 15px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 7vw, 65px);
+            line-height: 1.05;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: var(--lemon);
+        }
+
+        .hero p {
+            max-width: 430px;
+            line-height: 1.8;
+            font-size: 14px;
+            color: #e3eaff;
+        }
+
+        /* CONTENT */
+
+        .container {
+            width: 86%;
+            max-width: 1150px;
+            margin: -25px auto 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 10px 35px #142d6412;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 45px;
+        }
+
+        .welcome-card h2 {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .welcome-card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .welcome-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: var(--lemon);
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+            flex-shrink: 0;
+        }
+
+        /* GALLERY */
+
+        .section {
+            margin-bottom: 45px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-number {
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            background: var(--blue);
+            color: white;
+            font-weight: 900;
+            border-radius: 11px;
+            font-size: 13px;
+        }
+
+        .section-heading h2 {
             font-size: 19px;
+            font-weight: 900;
+        }
+
+        .section-heading p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
         }
 
         .galeri {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
         }
 
         .foto {
             background: white;
-            padding: 8px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #00000010;
+            padding: 9px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px #142d640d;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+            overflow: hidden;
+        }
+
+        .foto:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px #142d641c;
         }
 
         .foto img {
-            width: 100%;
             display: block;
-            border-radius: 8px;
+            width: 100%;
+            border-radius: 10px;
+            object-fit: contain;
+            background: #f0f2f8;
+        }
+
+        .foto-label {
+            padding: 12px 5px 5px;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: bold;
         }
 
         .kosong {
+            grid-column: 1 / -1;
+            background: white;
+            border: 1px dashed #cbd5eb;
+            padding: 30px 15px;
+            border-radius: 15px;
+            color: var(--muted);
             text-align: center;
-            padding: 30px 10px;
-            color: #887875;
+            font-size: 13px;
         }
 
-        footer {
+        /* STATUS */
+
+        .status {
             text-align: center;
-            margin-top: 40px;
-            color: #9b8883;
+            color: var(--muted);
+            font-size: 13px;
+            padding: 25px;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 65px;
+            background: var(--navy);
+            color: white;
+            text-align: center;
+            padding: 35px 15px;
+        }
+
+        footer h3 {
+            letter-spacing: 3px;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        footer h3 span {
+            color: var(--lemon);
+        }
+
+        footer p {
             font-size: 12px;
+            color: #b9c5df;
+            line-height: 1.8;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 10px;
+            color: #8493b5;
+        }
+
+        /* PHOTO VIEWER */
+
+        .viewer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99;
+            background: #07112bed;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .viewer.active {
+            display: flex;
+        }
+
+        .viewer img {
+            max-width: 95%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .close-viewer {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 17px 6%;
+            }
+
+            .hero {
+                padding: 50px 7% 65px;
+            }
+
+            .container {
+                width: 90%;
+            }
+
+            .galeri {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .welcome-card {
+                padding: 18px;
+            }
+
+            .section-heading h2 {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 370px) {
+            .galeri {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>SNAPORIA</h1>
-    <p>Your moments, your memories.</p>
-</header>
+    <nav class="navbar">
+        <div class="brand">KLIK<span>SNAP</span></div>
+        <div class="nav-label">PHOTO GALLERY</div>
+    </nav>
 
-<h2>Foto Original</h2>
-<div class="galeri" id="galeri-asli"></div>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">YOUR SPECIAL MOMENTS</div>
 
-<h2>Foto Black & White</h2>
-<div class="galeri" id="galeri-bw"></div>
+            <h1>Your Moments,<br>
+                <span>Your Memories.</span>
+            </h1>
 
-<h2>Foto dengan Frame</h2>
-<div class="galeri" id="galeri-frame"></div>
+            <p>
+                Setiap momen punya cerita.
+                Temukan kembali keseruan dan kenanganmu
+                bersama KLIKSNAP.
+            </p>
+        </div>
+    </header>
 
-<footer>© SNAPORIA Photobooth</footer>
+    <main class="container">
+
+        <div class="welcome-card">
+            <div>
+                <h2>Welcome to Your Gallery!</h2>
+                <p>
+                    Semua hasil fotomu tersimpan di sini.
+                    Pilih foto favoritmu dan nikmati kembali momennya.
+                </p>
+            </div>
+
+            <div class="welcome-icon">📸</div>
+        </div>
+
+        <section class="section">
+            <div class="section-heading">
+                <div class="section-number">01</div>
+                <div>
+                    <h2>Original Photos</h2>
+                    <p>Foto asli hasil sesi photobooth kamu</p>
+                </div>
+            </div>
+
+            <div class="galeri" id="galeri-asli"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div class="section-number">02</div>
+                <div>
+                    <h2>Black & White</h2>
+                    <p>Versi hitam putih dengan kesan klasik</p>
+                </div>
+            </div>
+
+            <div class="galeri" id="galeri-bw"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div class="section-number">03</div>
+                <div>
+                    <h2>Final Photo</h2>
+                    <p>Hasil foto pilihan lengkap dengan frame</p>
+                </div>
+            </div>
+
+            <div class="galeri" id="galeri-frame"></div>
+        </section>
+
+        <div class="status" id="status-galeri">
+            Menyiapkan galeri foto kamu...
+        </div>
+
+    </main>
+
+    <footer>
+        <h3>KLIK<span>SNAP</span></h3>
+        <p>Your moments, your memories.</p>
+        <p>Thank you for making memories with us!</p>
+
+        <div class="copyright">
+            © 2026 KLIKSNAP Photobooth. All rights reserved.
+        </div>
+    </footer>
+
+    <div class="viewer" id="viewer" onclick="tutupViewer()">
+        <button class="close-viewer" aria-label="Tutup"
+            onclick="tutupViewer()">&times;</button>
+        <img id="viewer-image" src="" alt="Foto ukuran besar">
+    </div>
 
 <script>
 async function muatGaleri() {
     const parameter = new URLSearchParams(window.location.search);
     const alamatData = parameter.get('data');
+    const status = document.getElementById('status-galeri');
 
     if (!alamatData) {
         tampilkanKosong();
+        status.textContent = 'Belum ada sesi foto yang terhubung.';
         return;
     }
 
@@ -102,21 +477,25 @@ async function muatGaleri() {
 
         const data = await response.json();
 
-        tampilkanFoto(data.asli || [], 'galeri-asli');
-        tampilkanFoto(data.bw || [], 'galeri-bw');
-        tampilkanFoto(data.frame ? [data.frame] : [], 'galeri-frame');
+        tampilkanFoto(data.asli || [], 'galeri-asli', 'Original');
+        tampilkanFoto(data.bw || [], 'galeri-bw', 'Black & White');
+        tampilkanFoto(data.frame ? [data.frame] : [], 'galeri-frame', 'Final');
+
+        status.textContent = 'Galeri berhasil dimuat. Selamat menikmati kenanganmu!';
 
     } catch (error) {
-        document.body.innerHTML +=
-            '<p class="kosong">Galeri belum bisa dimuat. Silakan coba lagi.</p>';
+        status.textContent =
+            'Galeri belum bisa dimuat. Silakan coba kembali beberapa saat lagi.';
     }
 }
 
-function tampilkanFoto(daftarFoto, tempat) {
+function tampilkanFoto(daftarFoto, tempat, label) {
     const galeri = document.getElementById(tempat);
+    galeri.innerHTML = '';
 
     if (!daftarFoto.length) {
-        galeri.innerHTML = '<p class="kosong">Belum ada foto.</p>';
+        galeri.innerHTML =
+            '<div class="kosong">Belum ada foto pada bagian ini.</div>';
         return;
     }
 
@@ -126,10 +505,17 @@ function tampilkanFoto(daftarFoto, tempat) {
 
         const gambar = document.createElement('img');
         gambar.src = url;
-        gambar.alt = 'Foto SNAPORIA ' + (index + 1);
+        gambar.alt = label + ' KLIKSNAP ' + (index + 1);
         gambar.loading = 'lazy';
 
+        gambar.addEventListener('click', () => bukaViewer(url));
+
+        const keterangan = document.createElement('div');
+        keterangan.className = 'foto-label';
+        keterangan.textContent = label + ' Photo ' + (index + 1);
+
         kotak.appendChild(gambar);
+        kotak.appendChild(keterangan);
         galeri.appendChild(kotak);
     });
 }
@@ -137,8 +523,17 @@ function tampilkanFoto(daftarFoto, tempat) {
 function tampilkanKosong() {
     ['galeri-asli', 'galeri-bw', 'galeri-frame'].forEach(id => {
         document.getElementById(id).innerHTML =
-            '<p class="kosong">Belum ada sesi foto.</p>';
+            '<div class="kosong">Belum ada sesi foto.</div>';
     });
+}
+
+function bukaViewer(url) {
+    document.getElementById('viewer-image').src = url;
+    document.getElementById('viewer').classList.add('active');
+}
+
+function tutupViewer() {
+    document.getElementById('viewer').classList.remove('active');
 }
 
 muatGaleri();
